@@ -19,6 +19,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'NorthLight Consulting Global',
   description: 'Digital growth agency delivering measurable results through SEO, PPC, AI automation, and full brand transformation.',
+  icons: {
+    icon: '/images/icon.png',
+    apple: '/images/icon.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

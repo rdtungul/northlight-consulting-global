@@ -5,7 +5,6 @@ import { services } from '@/lib/services';
 export default function Footer() {
   return (
     <footer className="bg-brand-black border-t border-white/10">
-      {/* CTA Strip */}
 
       {/* Links row */}
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-12 grid md:grid-cols-3 gap-8">

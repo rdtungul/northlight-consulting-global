@@ -1,11 +1,10 @@
-'use client';
-import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { services } from '@/lib/services';
 import SectionLabel from '@/components/ui/SectionLabel';
 
 export default function ServicesOverview() {
   return (
-    <section className="bg-brand-darkgray py-24 px-6 lg:px-12">
+    <section className="bg-[#0D1B2A] py-24 px-6 lg:px-12">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-14">
           <SectionLabel>What We Do</SectionLabel>
@@ -14,22 +13,36 @@ export default function ServicesOverview() {
             End-to-end digital solutions under one roof — no handoffs, no excuses.
           </p>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {services.map((service, i) => (
-            <motion.a
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {services.map((service) => (
+            <a
               key={service.href}
               href={service.href}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: i * 0.05 }}
-              className="group flex items-center gap-3 bg-brand-black border border-white/10 rounded-xl px-5 py-4 hover:border-brand-purple hover:bg-brand-purple/10 transition-all duration-200"
+              className="group relative aspect-video overflow-hidden"
             >
-              <span className="text-brand-purple font-bold text-xl">→</span>
-              <span className="text-white font-medium group-hover:text-brand-purple transition-colors">
-                {service.label}
-              </span>
-            </motion.a>
+              {/* Background image */}
+              <Image
+                src={service.image}
+                alt={service.alt}
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="object-cover"
+              />
+
+              {/* Color overlay */}
+              <div
+                className="absolute inset-0 transition-opacity duration-500 opacity-70 group-hover:opacity-40"
+                style={{ backgroundColor: service.overlay }}
+              />
+
+              {/* Title */}
+              <div className="absolute bottom-0 left-0 p-5">
+                <h3 className="font-display text-white font-black text-base uppercase tracking-wide leading-tight">
+                  {service.label}
+                </h3>
+              </div>
+            </a>
           ))}
         </div>
       </div>
