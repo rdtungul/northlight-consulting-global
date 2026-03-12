@@ -10,6 +10,12 @@ const values = [
   { icon: '🤖', title: 'AI-Powered Efficiency',   body: 'We bake automation into everything we build for you.' },
 ];
 
+const variants = {
+  enter:  (d: number) => ({ opacity: 0, x: d > 0 ? 80 : -80 }),
+  center: { opacity: 1, x: 0 },
+  exit:   (d: number) => ({ opacity: 0, x: d > 0 ? -80 : 80 }),
+};
+
 export default function ValueProps() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
@@ -29,12 +35,6 @@ export default function ValueProps() {
     return () => clearInterval(timer);
   }, [next]);
 
-  const variants = {
-    enter:  (d: number) => ({ opacity: 0, x: d > 0 ? 80 : -80 }),
-    center: { opacity: 1, x: 0 },
-    exit:   (d: number) => ({ opacity: 0, x: d > 0 ? -80 : 80 }),
-  };
-
   return (
     <section className="bg-brand-black py-24 px-6 lg:px-12">
       <div className="max-w-7xl mx-auto">
@@ -43,7 +43,7 @@ export default function ValueProps() {
           <h2 className="font-display text-4xl font-black text-white">Built Different. Built for Results.</h2>
         </div>
 
-        {/* Carousel */}
+        {/* Shared carousel wrapper */}
         <div className="relative flex items-center gap-4">
           {/* Prev */}
           <button
@@ -54,7 +54,6 @@ export default function ValueProps() {
             <ChevronLeft size={18} />
           </button>
 
-          {/* Cards */}
           <div className="overflow-hidden flex-1">
             <AnimatePresence custom={direction} mode="wait">
               <motion.div
@@ -65,12 +64,20 @@ export default function ValueProps() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.35, ease: 'easeInOut' }}
-                className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
               >
+                {/* Mobile: show only the active card */}
+                <div className="md:hidden bg-brand-darkgray border border-brand-purple/60 rounded-2xl p-8">
+                  <span className="text-3xl mb-4 block">{values[current].icon}</span>
+                  <h3 className="font-display text-white font-bold text-lg mb-2">{values[current].title}</h3>
+                  <p className="text-brand-silver text-sm leading-relaxed">{values[current].body}</p>
+                </div>
+
+                {/* Desktop: show all 4 cards */}
                 {values.map((v, i) => (
                   <div
                     key={v.title}
-                    className={`bg-brand-darkgray border rounded-2xl p-8 transition-colors duration-300 ${
+                    className={`hidden md:block bg-brand-darkgray border rounded-2xl p-8 transition-colors duration-300 ${
                       i === current ? 'border-brand-purple/60' : 'border-white/10 hover:border-brand-purple/50'
                     }`}
                   >
@@ -91,6 +98,18 @@ export default function ValueProps() {
           >
             <ChevronRight size={18} />
           </button>
+        </div>
+
+        {/* Dot indicators — mobile only */}
+        <div className="md:hidden flex justify-center gap-2 mt-5">
+          {values.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i); }}
+              className={`w-2 h-2 rounded-full transition-colors duration-200 ${i === current ? 'bg-brand-purple' : 'bg-white/20'}`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
         </div>
       </div>
     </section>
